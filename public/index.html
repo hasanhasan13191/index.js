@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GainzAlgo Live Signals</title>
+  <style>
+    body { background: #000; color: #fff; font-family: sans-serif; padding: 1rem; }
+    .signal { border: 1px solid #444; margin: 1rem 0; padding: 1rem; border-radius: 8px; background: #111; }
+    .buy { color: #00ff99; }
+    .sell { color: #ff4f4f; }
+  </style>
+</head>
+<body>
+  <h1>💹 GainzAlgo V2 - Live Signals</h1>
+  <div id="signals">Loading...</div>
+
+  <script>
+    async function fetchSignals() {
+      const res = await fetch('/api/signals');
+      const data = await res.json();
+      const html = data.map(sig => `
+        <div class="signal ${sig.signal.toLowerCase()}">
+          <strong>${sig.pair} - ${sig.signal}</strong><br/>
+          TP: ${sig.tp} | SL: ${sig.sl}
+        </div>
+      `).join('');
+      document.getElementById('signals').innerHTML = html;
+    }
+
+    fetchSignals();
+    setInterval(fetchSignals, 60000);
+  </script>
+</body>
+</html>
